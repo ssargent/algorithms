@@ -1,13 +1,16 @@
 package pathfinding
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
+
+	"github.com/go-errors/errors"
 )
 
 type Point struct {
-	X int
-	Y int
+	X float64
+	Y float64
 }
 
 type Board struct {
@@ -19,24 +22,25 @@ type Board struct {
 func NewBoard(config []string) (*Board, error) {
 	board := Board{}
 
+	fmt.Printf("Length of board config %d\n", len(config))
 	// first row has our size.
 	sizeRow := config[0]
 	parts := strings.Split(sizeRow, " ")
 	tmpSize, err := strconv.Atoi(parts[0])
 	if err != nil {
-		return nil, err
+		return nil, errors.Errorf("error checking size original(%s) %+v", sizeRow, err)
 	}
 	board.Size = tmpSize
 
 	// second row has our queen
 	queenRow := config[1]
 	queenParts := strings.Split(queenRow, " ")
-	tmpX, err := strconv.Atoi(queenParts[0])
+	tmpX, err := strconv.ParseFloat(queenParts[0], 64)
 	if err != nil {
 		return nil, err
 	}
 
-	tmpY, err := strconv.Atoi(queenParts[1])
+	tmpY, err := strconv.ParseFloat(queenParts[1], 64)
 	if err != nil {
 		return nil, err
 	}
@@ -46,12 +50,12 @@ func NewBoard(config []string) (*Board, error) {
 	for x := 2; x < len(config); x++ {
 		blockRow := config[x]
 		blockParts := strings.Split(blockRow, " ")
-		tmpX, err := strconv.Atoi(blockParts[0])
+		tmpX, err := strconv.ParseFloat(blockParts[0], 64)
 		if err != nil {
 			return nil, err
 		}
 
-		tmpY, err := strconv.Atoi(blockParts[1])
+		tmpY, err := strconv.ParseFloat(blockParts[1], 64)
 		if err != nil {
 			return nil, err
 		}
